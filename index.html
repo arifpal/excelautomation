@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Automation - Arif Kassim</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --secondary: #334155;
+            --accent: #f97316;
+            --accent-light: #fb923c;
+            --success: #10b981;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border: #cbd5e1;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-white);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        nav .logo span {
+            color: var(--accent);
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 7rem 2rem;
+            text-align: center;
+        }
+
+        .hero .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .accent {
+            color: var(--accent);
+        }
+
+        .hero .subtitle {
+            font-size: 1.35rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .hero .tagline {
+            font-size: 1.05rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+
+        .cta-primary {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.6rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        }
+
+        .cta-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section Spacing */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        section h2 {
+            font-size: 2.75rem;
+            margin-bottom: 3.5rem;
+            text-align: center;
+            color: var(--primary);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        section h2 .accent {
+            color: var(--accent);
+        }
+
+        section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border);
+            border-left: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+            background: var(--bg-light);
+        }
+
+        .service-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* Demo Section */
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .demo-visual {
+            background: var(--bg-light);
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border);
+            text-align: center;
+        }
+
+        .demo-visual.before {
+            border-left: 6px solid #ef4444;
+        }
+
+        .demo-visual.after {
+            border-left: 6px solid var(--success);
+        }
+
+        .demo-label {
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-visual.before .demo-label {
+            color: #ef4444;
+        }
+
+        .demo-visual.after .demo-label {
+            color: var(--success);
+        }
+
+        .demo-data {
+            background: var(--bg-white);
+            padding: 1.75rem;
+            border-radius: 0.5rem;
+            text-align: left;
+            font-size: 0.85rem;
+            line-height: 2.2;
+            font-family: 'Courier New', monospace;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .demo-stat {
+            font-size: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .demo-arrow {
+            font-size: 1.8rem;
+            color: var(--accent);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+            .demo-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.05) 0%, rgba(251, 146, 60, 0.05) 100%);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.1);
+        }
+
+        .pricing-card h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .pricing-card .description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .pricing-card .price {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .pricing-card .period {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2.5rem;
+        }
+
+        .pricing-card li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .pricing-card li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-card li:before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: 900;
+            margin-right: 0.6rem;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--bg-light);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 650px;
+            margin: 2.5rem auto;
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-secondary {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--accent);
+            padding: 1rem 2rem;
+            border: 2px solid var(--accent);
+            border-radius: 0.6rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .cta-secondary:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2.5rem;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer p {
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        footer p:first-child {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            nav .nav-links {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            section {
+                padding: 3.5rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">Excel<span>.</span>Auto</div>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Save <span class="accent">Hours</span> on Spreadsheets</h1>
+            <p class="subtitle">Automate Your Excel & Data Workflows</p>
+            <p class="tagline">Let me handle your tedious reconciliation, consolidation, and reporting. You focus on growing your business.</p>
+            <a href="#contact" class="cta-primary">Book a Free Consultation</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <h2>About <span class="accent">Me</span></h2>
+                <p><strong>Arif Kassim</strong> | Automation Consultant</p>
+                <p>Automation consultant specializing in Excel & data workflows. With 15+ years automating complex business processes, I help accountants, freelancers, and small teams save hours every month through intelligent spreadsheet automation.</p>
+                <p><strong>Your data shouldn't be manual. Let's fix that.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <h2>What I <span class="accent">Do</span></h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>📊 Monthly Reconciliation</h3>
+                    <p>Automated expense reconciliation from bank exports, invoices, and ledgers. No more manual matching.</p>
+                </div>
+                <div class="service-card">
+                    <h3>📈 Data Consolidation</h3>
+                    <p>Pull data from multiple sources, clean it, and merge into a single source of truth. Automatically.</p>
+                </div>
+                <div class="service-card">
+                    <h3>📋 Reporting & Dashboards</h3>
+                    <p>Generate monthly reports and executive dashboards with live data. Updated automatically, every time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo">
+        <div class="container">
+            <h2>Before & <span class="accent">After</span></h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2.5rem; font-size: 1.05rem; font-weight: 500;">See how automation transforms your workflow:</p>
+            <div class="demo-container">
+                <div class="demo-visual before">
+                    <div class="demo-label">❌ Before</div>
+                    <div class="demo-data">
+                        Invoice #001: $500<br>
+                        Invoice #002: $750<br>
+                        Invoice #003: $1,200<br>
+                        ...(50+ more manually)<br>
+                        <br>
+                        Manual reconciliation<br>
+                        Error rate: ~5%<br>
+                        Time: 8 hours/month
+                    </div>
+                    <div class="demo-stat">😫 Manual, Error-Prone</div>
+                </div>
+
+                <div class="demo-arrow">→</div>
+
+                <div class="demo-visual after">
+                    <div class="demo-label">✓ After</div>
+                    <div class="demo-data">
+                        Automated import<br>
+                        All invoices reconciled<br>
+                        Variance flagged<br>
+                        <br>
+                        Auto-generated report<br>
+                        Error rate: 0%<br>
+                        Time: 30 minutes/month
+                    </div>
+                    <div class="demo-stat">🚀 Automated, Accurate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <h2>Simple <span class="accent">Pricing</span></h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic Setup</h3>
+                    <p class="description">One-time implementation</p>
+                    <div class="price">$1,200</div>
+                    <p class="period">One-time</p>
+                    <ul>
+                        <li>Initial data audit</li>
+                        <li>Automation setup</li>
+                        <li>Testing & validation</li>
+                        <li>30 days support</li>
+                    </ul>
+                    <a href="#contact" class="cta-primary">Get Started</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>⭐ Standard</h3>
+                    <p class="description">Setup + Monthly Support</p>
+                    <div class="price">$2,500</div>
+                    <p class="period">One-time + $500/month</p>
+                    <ul>
+                        <li>Everything in Basic</li>
+                        <li>Monthly updates</li>
+                        <li>Ongoing support</li>
+                        <li>Quarterly reviews</li>
+                        <li>Process optimization</li>
+                    </ul>
+                    <a href="#contact" class="cta-primary">Recommended</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <p class="description">Custom automation</p>
+                    <div class="price">Custom</div>
+                    <p class="period">Contact for quote</p>
+                    <ul>
+                        <li>Multiple workflows</li>
+                        <li>API integrations</li>
+                        <li>Dedicated support</li>
+                        <li>Custom dashboard</li>
+                        <li>Unlimited updates</li>
+                    </ul>
+                    <a href="#contact" class="cta-secondary">Request Quote</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background: var(--bg-light);">
+        <div class="container">
+            <h2>Ready to Save <span class="accent">Hours</span>?</h2>
+            <div class="contact-content">
+                <p>Book a free 15-minute consultation. No obligation, no pitch. Just a quick chat about your workflow and how I can help.</p>
+                <div class="contact-buttons">
+                    <a href="https://calendly.com/arifpkassim/30min" class="cta-primary">📅 Book a Call</a>
+                    <a href="mailto:arifpkassim@gmail.com" class="cta-secondary">📧 Email Me</a>
+                    <a href="https://wa.me/919847553450?text=Hi%20Arif%2C%20I%20want%20to%20discuss%20Excel%20automation%20for%20my%20business." class="cta-secondary">💬 WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Arif Kassim | Excel Automation Consultant</p>
+            <p>Building automation workflows that save time, reduce errors, and scale.</p>
+        </div>
+    </footer>
+</body>
+</html>
